@@ -49,6 +49,7 @@ Player::Player(IGameDef *gamedef):
 	sprinting_timer(-30),
 	enable_sprinting_timer(0),
 	enable_flying_timer(0),
+	camera_sneak_state(0),
 	hunger(PLAYER_MAX_HUNGER),
 	hunger_timer(0.0),
 	hunger_hurt_heal_timer(0.0),

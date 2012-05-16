@@ -41,6 +41,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "gamedef.h"
 #include "sound.h"
 #include "event.h"
+#include "localplayer.h"
 
 Camera::Camera(scene::ISceneManager* smgr, MapDrawControl& draw_control,
 		IGameDef *gamedef):
@@ -305,6 +306,16 @@ void Camera::update(LocalPlayer* player, f32 frametime, v2u32 screensize,
 	{
 		campos += v3f(0, cameratilt * -13, 0);
 		camrot += v3f(0, 0, cameratilt * 13 * BS);
+	}
+	if(player->control.sneak)
+	{
+		campos += v3f(0, -player->camera_sneak_state*BS, 0);
+		if (player->camera_sneak_state < 0.18)
+			player->camera_sneak_state += 0.02;
+	}
+	else if (player->camera_sneak_state > 0)
+	{
+			player->camera_sneak_state -= 0.02;
 	}
 	campos += v3f(0, 0, m_sprinting_fov_state * BS);
 

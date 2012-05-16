@@ -171,6 +171,8 @@ public:
 
 	float enable_flying_timer;
 
+	float camera_sneak_state;
+
 	u16 hunger;
 
 	f32 hunger_timer;
