@@ -42,6 +42,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "guiChatConsole.h"
 #include "config.h"
 #include "clouds.h"
+#include "particles.cpp"
 #include "camera.h"
 #include "farmesh.h"
 #include "mapblock.h"
@@ -69,6 +70,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "event_manager.h"
 #include <list>
 #include "IProgressBar.h"
+#include "particles.h"
 
 /*
 	Setting this to 1 enables a special camera mode that forces
@@ -1159,6 +1161,12 @@ void the_game(
 	}
 
 	/*
+		Particles test
+	*/
+	Particles *particle = NULL;
+	particle = new Particles(smgr->getRootSceneNode(), smgr, time(0));
+
+	/*
 		Skybox thingy
 	*/
 
@@ -2154,6 +2162,8 @@ void the_game(
 		*/
 		if(digging)
 		{
+			//Particle* particle = new Particle;
+			//Particle* particle = Particle:create(m_gamedef, client.getEnv());
 			if(input->getLeftReleased())
 			{
 				infostream<<"Left button released"
@@ -2519,6 +2529,11 @@ void the_game(
 				clouds->setVisible(false);
 			}
 		}
+
+		/*
+			Update particles
+		*/
+		clouds->step(dtime);
 		
 		/*
 			Update farmesh
