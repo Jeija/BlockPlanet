@@ -1612,6 +1612,7 @@ minetest.register_entity("default:falling_node", {
 	on_activate = function(self, staticdata)
 		self.nodename = staticdata
 		self.object:set_armor_groups({immortal=1})
+		self.object:setvelocity({x=0, y=-0.01, z=0})
 		self.object:setacceleration({x=0, y=-10, z=0})
 		self:set_node(self.nodename)
 	end,
