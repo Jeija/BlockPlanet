@@ -20,6 +20,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef PARTICLES_HEADER
 #define PARTICLES_HEADER
 
+#define DIGGING_PARTICLES_AMOUNT 10
+
 #include "common_irrlicht.h"
 #include <iostream>
 
@@ -27,9 +29,14 @@ class Particles : public scene::ISceneNode
 {
 public:
 	Particles(
-			scene::ISceneNode* parent,
-			scene::ISceneManager* mgr,
-			s32 id
+		IGameDef* gamedef,
+		scene::ISceneManager* mgr,
+		LocalPlayer *player,
+		s32 id,
+		v3f pos,
+		v3f velocity,
+		v3f acceleration,
+		float expirationtime
 	);
 
 	~Particles();
@@ -62,13 +69,28 @@ public:
 
 	void step(float dtime);
 
+	float timer;
+
+	float expiration;
+
 private:
+	IGameDef *m_gamedef;
 	core::aabbox3d<f32> m_box;
 	video::SMaterial m_material;
-	float m_time;
+	v3f m_pos;
+	v3f m_velocity;
+	v3f m_acceleration;
+	int tex_x0;
+	int tex_x1;
+	int tex_y0;
+	int tex_y1;
+	LocalPlayer *m_player;
 };
 
+Particles *allparticles[400]= {NULL};
 
+void addParticle(IGameDef* gamedef, scene::ISceneManager* smgr, LocalPlayer *player, v3f pos, v3f velocity, v3f acceleration, float expirationtime);
+void addDiggingParticles(IGameDef* gamedef, scene::ISceneManager *smgr, LocalPlayer *player, v3f pos);
 
 #endif
 

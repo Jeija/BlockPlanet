@@ -42,7 +42,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "guiChatConsole.h"
 #include "config.h"
 #include "clouds.h"
-#include "particles.cpp"
 #include "camera.h"
 #include "farmesh.h"
 #include "mapblock.h"
@@ -71,6 +70,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <list>
 #include "IProgressBar.h"
 #include "particles.h"
+#include "particles.cpp" //will of course be removed
 
 /*
 	Setting this to 1 enables a special camera mode that forces
@@ -1161,12 +1161,6 @@ void the_game(
 	}
 
 	/*
-		Particles test
-	*/
-	Particles *particle = NULL;
-	particle = new Particles(smgr->getRootSceneNode(), smgr, time(0));
-
-	/*
 		Skybox thingy
 	*/
 
@@ -2162,8 +2156,6 @@ void the_game(
 		*/
 		if(digging)
 		{
-			//Particle* particle = new Particle;
-			//Particle* particle = Particle:create(m_gamedef, client.getEnv());
 			if(input->getLeftReleased())
 			{
 				infostream<<"Left button released"
@@ -2312,6 +2304,11 @@ void the_game(
 					client.setCrack(-1, v3s16(0,0,0));
 					MapNode wasnode = map.getNode(nodepos);
 					client.removeNode(nodepos);
+					/*
+						Particles test
+					*/
+					//addParticle(gamedef, smgr, v3f(0,0,0), v3f(0,0.5,0), v3f(0,0,0), 5);
+					addDiggingParticles(gamedef, smgr, player, nodepos);
 
 					dig_time = 0;
 					digging = false;
@@ -2533,7 +2530,22 @@ void the_game(
 		/*
 			Update particles
 		*/
-		clouds->step(dtime);
+		
+		for (u16 i=0; i<400; i++)
+		{
+			if (allparticles[i] != NULL)
+			{
+				allparticles[i]->step(dtime);
+				printf ("FOUND ONE WITH %f TIMER and %f EXPIRATION\n", allparticles[i]->timer, allparticles[i]->expiration);
+				if (allparticles[i]->timer > allparticles[i]->expiration)
+				{
+					printf("--> Expires \n");
+					allparticles[i]->remove();
+					delete allparticles[i];
+					allparticles[i] = NULL;
+				}
+			}
+		}
 		
 		/*
 			Update farmesh
